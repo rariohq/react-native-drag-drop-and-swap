@@ -144,7 +144,7 @@ class DragContainer extends React.Component {
             toValue: {
               x: 0, //this._offset.x - x,
               y: 0 //his._offset.y - y
-            }
+            }, useNativeDriver: false,
           }).start(() => {
               this._locked = false;
               this._handleDragging({x: -100000, y: -100000});
