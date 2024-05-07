@@ -11,7 +11,6 @@ import {
   Modal,
   Easing,
   Animated,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -25,7 +24,6 @@ const allOrientations = [
 
 class DragModal extends React.Component {
   render() {
-    let {startPosition} = this.props.content;
     return <Modal transparent={true} supportedOrientations={allOrientations}>
         <TouchableWithoutFeedback onPressIn={this.props.drop}>
           <Animated.View style={this.props.location.getLayout()}>
@@ -176,7 +174,7 @@ class DragContainer extends React.Component {
         onPanResponderMove: (...args) => Animated.event([null, {
            dx: this.state.location.x, // x,y are Animated.Value
            dy: this.state.location.y,
-         }]).apply(this, args),
+         }], { useNativeDriver: false }).apply(this, args),
         onPanResponderTerminationRequest: (evt, gestureState) => true,
         onPanResponderRelease: (evt, gestureState) => {
           if (!this.state.draggingComponent) return;

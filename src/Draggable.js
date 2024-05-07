@@ -5,10 +5,7 @@
  * @Last Modified time: 2018-01-30 16:58:05
  */
 import React from 'react';
-import {
-  View,
-  TouchableOpacity
-} from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 class Draggable extends React.Component {
