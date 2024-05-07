@@ -152,7 +152,6 @@ class DragContainer extends React.Component {
                 draggingComponent: null
               })
           })
-        
       }
       this._handleDragging({x: -100000, y: -100000});
       this.setState({
@@ -160,7 +159,7 @@ class DragContainer extends React.Component {
       })
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this._panResponder = PanResponder.create({
         // Ask to be the responder:
         onStartShouldSetPanResponder: () => {
@@ -170,7 +169,7 @@ class DragContainer extends React.Component {
           return false
         },
         onMoveShouldSetPanResponder: (evt, gestureState) => !!this.state.draggingComponent,
-//        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+        // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
         onPanResponderMove: (...args) => Animated.event([null, {
            dx: this.state.location.x, // x,y are Animated.Value
            dy: this.state.location.y,
@@ -182,7 +181,7 @@ class DragContainer extends React.Component {
           this._handleDrop();
         }
       });
-  }
+    }
 
     onDrag(ref, children, data) {
       ref.measure((...args) => {
