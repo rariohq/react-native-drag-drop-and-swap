@@ -20,12 +20,13 @@ class DropZone extends React.Component {
         this.onEnter = this.onEnter.bind(this);
         this.onLeave = this.onLeave.bind(this);
         this.onDrop = this.onDrop.bind(this);
+        this.wrapperRef = React.createRef();
     }
     
     reportMeasurements() {
-      if (this.props.dragging) this.context.dragContext.removeZone(this.refs.wrapper);
-      this.refs.wrapper.measure((_, __, width, height, x, y) => {
-        if (!this.props.dragging) this.context.dragContext.updateZone({width, height, x, y, ref: this.refs.wrapper, onEnter: this.onEnter, onLeave: this.onLeave, onDrop: this.onDrop});
+      if (this.props.dragging) this.context.dragContext.removeZone(this.wrapperRef.current);
+      this.wrapperRef.current.measure((_, __, width, height, x, y) => {
+        if (!this.props.dragging) this.context.dragContext.updateZone({width, height, x, y, ref: this.wrapperRef.current, onEnter: this.onEnter, onLeave: this.onLeave, onDrop: this.onDrop});
       })
     }
 
@@ -41,7 +42,7 @@ class DropZone extends React.Component {
     }
 
     componentWillUnmount() {
-      this.context.dragContext.removeZone(this.refs.wrapper);
+      this.context.dragContext.removeZone(this.wrapperRef.current);
       clearInterval(this._timer);
     }
     componentDidUpdate() {
@@ -81,7 +82,7 @@ class DropZone extends React.Component {
     }
 
     render() {
-        return <View style={this.props.style} pointerEvents={this.props.pointerEvents} onLayout={this.reportMeasurements} ref="wrapper">
+        return <View style={this.props.style} pointerEvents={this.props.pointerEvents} onLayout={this.reportMeasurements} ref={this.wrapperRef}>
           {
             React.Children.map(this.props.children, child => {
               return React.cloneElement(child, Object.assign({}, this.props, {dragOver: this.state.active}));
