@@ -11,7 +11,6 @@ import {
   Modal,
   Easing,
   Animated,
-  TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -25,7 +24,6 @@ const allOrientations = [
 
 class DragModal extends React.Component {
   render() {
-    let {startPosition} = this.props.content;
     return <Modal transparent={true} supportedOrientations={allOrientations}>
         <TouchableWithoutFeedback onPressIn={this.props.drop}>
           <Animated.View style={this.props.location.getLayout()}>
@@ -146,7 +144,7 @@ class DragContainer extends React.Component {
             toValue: {
               x: 0, //this._offset.x - x,
               y: 0 //his._offset.y - y
-            }
+            }, useNativeDriver: false,
           }).start(() => {
               this._locked = false;
               this._handleDragging({x: -100000, y: -100000});
@@ -154,7 +152,6 @@ class DragContainer extends React.Component {
                 draggingComponent: null
               })
           })
-        
       }
       this._handleDragging({x: -100000, y: -100000});
       this.setState({
@@ -162,7 +159,7 @@ class DragContainer extends React.Component {
       })
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       this._panResponder = PanResponder.create({
         // Ask to be the responder:
         onStartShouldSetPanResponder: () => {
@@ -172,11 +169,11 @@ class DragContainer extends React.Component {
           return false
         },
         onMoveShouldSetPanResponder: (evt, gestureState) => !!this.state.draggingComponent,
-//        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+        // onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
         onPanResponderMove: (...args) => Animated.event([null, {
            dx: this.state.location.x, // x,y are Animated.Value
            dy: this.state.location.y,
-         }]).apply(this, args),
+         }], { useNativeDriver: false }).apply(this, args),
         onPanResponderTerminationRequest: (evt, gestureState) => true,
         onPanResponderRelease: (evt, gestureState) => {
           if (!this.state.draggingComponent) return;
@@ -184,7 +181,7 @@ class DragContainer extends React.Component {
           this._handleDrop();
         }
       });
-  }
+    }
 
     onDrag(ref, children, data) {
       ref.measure((...args) => {
